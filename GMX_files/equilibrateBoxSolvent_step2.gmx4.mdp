@@ -1,0 +1,92 @@
+; Box Solvent Equilibration
+;
+;     Input file
+;
+
+;
+;	Preprocessing.
+;
+;define              = -DPOSRES					; Defines to pass to the preprocessor.
+
+;
+;	Run Control.
+;
+integrator          = md					; Running type: md/sd/bd/steep/cg/l-bfgs/nm
+dt                  = 0.0001		 			; Time step for integration (0.001 ps).
+nsteps              = 1000000 					; Maximum number of steps to integrate.
+
+;
+;	Output Control.
+;
+;nstcomm             = 1							; Frequency for center of mass motion removal (1).
+nstcomm             = 100						; Frequency for center of mass motion removal (1).
+nstxout             = 500			  			; Frequency to write coordinates to output trajectory file (100 steps). 
+nstvout             = 500						; Frequency to write velocities to output trajectory file (100 steps).
+nstfout             = 0							; Frequency to write forces to output trajectory file (0 steps).
+nstlog              = 500						; Frequency to write energies to log file (100 steps).
+nstenergy           = 500						; Frequency to write energies to energy file (100 steps).
+
+;
+;	Output XTC Trajectory.
+;
+nstxtcout		= 500						; Frequency to write coordinates to xtc trajectory (0 steps).
+;nstxout-compressed	= 500						; Frequency to write coordinates to xtc trajectory (0 steps).
+xtc_precision		= 1000						; Precision to write to xtc trajectory (1000).
+;compressed-x-precision	= 1000						; Precision to write to xtc trajectory (1000).
+
+;
+;	Neighbor Searching.
+;
+nstlist             = 10						; Frequency to update the neighbor list (10 steps).
+ns_type             = grid						; Neighbor searching type: grid/simple.
+rlist               = 1.0						; Cut-off distance for the short-range neighbor list (1 nm).
+
+;
+;	Electrostatics and VdW.
+;
+coulombtype         = PME						; Type of coulomb electrostatics: cut-off/ewald/pme/pppm/reaction-field/generalized-reaction-field/shift/switch/user.
+rcoulomb            = 1.0						; Distance for the Coulomb cut-off (1 nm).
+
+vdwtype             = cut-off					; Type of VdW: cut-off/shift/switch/user.
+rvdw                = 1.0						; Distance for the LJ potential (1 nm).
+
+fourierspacing      = 0.12						; Maximum grid spacing for the FFT grid when using PPPM or PME (0.12 nm).
+fourier_nx        = 0							; Highest magnitude of wave vectors in reciprocal space when using Ewald or grid size when using PPPM or PME (0).
+fourier_ny        = 0							; Highest magnitude of wave vectors in reciprocal space when using Ewald or grid size when using PPPM or PME (0).
+fourier_nz        = 0							; Highest magnitude of wave vectors in reciprocal space when using Ewald or grid size when using PPPM or PME (0).
+pme_order         = 4							; Interpolation order for PME (4).
+ewald_rtol        = 1e-5						; Relative strength of the Ewald-shifted direct potential at the cutoff (1e-5).
+;optimize_fft      = yes							; Calculate/don't calculate the optimal FFT plan for the grid at startup.
+
+;
+;	Temperature Coupling.
+;
+;Tcoupl              = v-rescale				; Temperature Coupling algorithm: no/berendsen/nose-hoover.
+Tcoupl              = berendsen				; Temperature Coupling algorithm: no/berendsen/nose-hoover.
+tc_grps             = Other Water		; Groups to couple separately to temperature bath.
+tau_t               = 0.1     0.1			; Time constant for coupling in ps (one for each group in tc_grps).
+ref_t               = REMD_temp REMD_temp				; Reference Temperature for Coupling in Kelvin (one for each group in tc_grps)-
+
+;
+;	Pressure coupling.
+;
+;Pcoupl              = parrinello-rahman			; Pressure Coupling algorithm: no/berendsen/parrinello-rahman
+Pcoupl              = berendsen 				; Pressure Coupling algorithm: no/berendsen/parrinello-rahman
+Pcoupltype          = isotropic					; Pressure Coupling type: isotropic/semiisotropic/anisotropic/surface-tension/triclinic.
+tau_p               = 0.5						; Time constant for Coupling (1 ps).
+compressibility     = 4.5e-5					; Compressibility in bar -1.
+ref_p               = 1.0						; Reference Pressure for Coupling.
+
+;
+;	Velocity Generation.
+;
+gen_vel             = yes						; Generate velocities at startup according to Maxwell distribution: yes/no.
+gen_temp            = REMD_temp						; Temperature for Maxwell distribution (300 K).
+gen_seed            = 173529					; Used to initialize random generator for random velocities (173529).
+
+;
+;	Bonds.
+;
+constraints         = all-bonds					; Constraint type: none/hbonds/all-bonds/h-angles/all-angles.
+
+cutoff-scheme	    = Verlet					; Gromacs new Verlet scheme introduced in version 4.6.
