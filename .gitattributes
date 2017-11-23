@@ -1,1 +1,1 @@
-language perl
+*.py linguist-language=Python
